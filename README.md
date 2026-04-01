@@ -1,79 +1,31 @@
-<h1 align="center">✨ Full-Stack Interview Platform ✨</h1>
+# talent-iq
 
-![Demo App](/frontend/public/screenshot-for-readme.png)
+This project includes a backend server that uses the Piston code execution API to compile and run user-submitted code.
 
-✨ Highlights:
+## Piston API Changes (Feb 2026)
 
-- 🧑‍💻 VSCode-Powered Code Editor
-- 🔐 Authentication via Clerk
-- 🎥 1-on-1 Video Interview Rooms
-- 🧭 Dashboard with Live Stats
-- 🔊 Mic & Camera Toggle, Screen Sharing & Recording
-- 💬 Real-time Chat Messaging
-- ⚙️ Secure Code Execution in Isolated Environment
-- 🎯 Auto Feedback — Success / Fail based on test cases
-- 🎉 Confetti on Success + Notifications on Fail
-- 🧩 Practice Problems Page (solo coding mode)
-- 🔒 Room Locking — allows only 2 participants
-- 🧠 Background Jobs with Inngest (async tasks)
-- 🧰 REST API with Node.js & Express
-- ⚡ Data Fetching & Caching via TanStack Query
-- 🤖 CodeRabbit for PR Analysis & Code Optimization
-- 🧑‍💻 Git & GitHub Workflow (branches, PRs, merges)
-- 🚀 Deployment on Sevalla (free-tier friendly)
-
----
-
-## 🧪 .env Setup
-
-### Backend (`/backend`)
-
-```bash
-PORT=3000
-NODE_ENV=development
-
-DB_URL=your_mongodb_connection_url
-
-INNGEST_EVENT_KEY=your_inngest_event_key
-INNGEST_SIGNING_KEY=your_inngest_signing_key
-
-STREAM_API_KEY=your_stream_api_key
-STREAM_API_SECRET=your_stream_api_secret
-
-CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
-CLERK_SECRET_KEY=your_clerk_secret_key
-
-CLIENT_URL=http://localhost:5173
-```
-
-### Frontend (`/frontend`)
-
-```bash
-VITE_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
-
-VITE_API_URL=http://localhost:3000/api
-
-VITE_STREAM_API_KEY=your_stream_api_key
-```
-
----
-
-## 🔧 Run the Backend
-
-```bash
-
-cd backend
-npm install
-npm run dev
-```
-
----
-
-## 🔧 Run the Frontend
+The public Piston endpoint at `https://emkc.org/api/v2/piston/execute` became whitelist-only as of February 15, 2026. Requests from unapproved clients now receive a 401 response with a message like:
 
 ```
-bash
-cd frontend
-npm install
-npm run dev
+{"message":"Public Piston API is now whitelist only as of 2/15/2026. Please contact EngineerMan on Discord with use case justification or consider hosting your own Piston instance."}
 ```
+
+### What you need to do
+
+1. **Request whitelist access** from the Piston maintainers (EngineerMan on Discord) and set `PISTON_API_URL`/`PISTON_API_KEY` accordingly if granted.
+2. **Host your own Piston instance** and configure the backend to point at it using `PISTON_API_URL` environment variable. The code will automatically include an optional `PISTON_API_KEY` in the `Authorization` header if provided.
+3. If you continue using the public endpoint without being whitelisted, the code will log a 401 and return a 501/401 error to clients.
+
+### Environment variables
+
+- `PISTON_API_URL` – override the default endpoint. Example: `http://localhost:8000/api/v2/piston/execute`.
+- `PISTON_API_KEY` – optional bearer token for private or whitelisted endpoints.
+
+Set these values in the backend `.env` file or your deployment environment.
+
+```env
+PISTON_API_URL=https://emkc.org/api/v2/piston/execute
+PISTON_API_KEY=your_key_here
+```
+
+Feel free to extend this README with other project details.

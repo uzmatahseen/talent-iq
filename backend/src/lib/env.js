@@ -11,4 +11,9 @@ export const ENV = {
   INNGEST_SIGNING_KEY: process.env.INNGEST_SIGNING_KEY,
   STREAM_API_KEY: process.env.STREAM_API_KEY,
   STREAM_API_SECRET: process.env.STREAM_API_SECRET,
+  CLERK_PUBLISHABLE_KEY: process.env.CLERK_PUBLISHABLE_KEY,
+  CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
+  // optional Piston endpoint and key for code execution service
+  PISTON_API_URL: process.env.PISTON_API_URL,
+  PISTON_API_KEY: process.env.PISTON_API_KEY,
 };

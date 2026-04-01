@@ -1,11 +1,11 @@
 // Piston API is a service for code execution
 
-const PISTON_API = "https://emkc.org/api/v2/piston";
+const BACKEND_API = "http://localhost:3000/api/chat";
 
 const LANGUAGE_VERSIONS = {
-  javascript: { language: "javascript", version: "18.15.0" },
+  javascript: { language: "javascript" },
   python: { language: "python", version: "3.10.0" },
-  java: { language: "java", version: "15.0.2" },
+  java: { language: "java" },
 };
 
 /**
@@ -24,21 +24,21 @@ export async function executeCode(language, code) {
       };
     }
 
-    const response = await fetch(`${PISTON_API}/execute`, {
+    const bodyPayload = {
+      language: languageConfig.language,
+      code: code,
+    };
+    if (languageConfig.version) {
+      bodyPayload.version = languageConfig.version;
+    }
+
+    const response = await fetch(`${BACKEND_API}/execute`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        language: languageConfig.language,
-        version: languageConfig.version,
-        files: [
-          {
-            name: `main.${getFileExtension(language)}`,
-            content: code,
-          },
-        ],
-      }),
+      credentials: "include",
+      body: JSON.stringify(bodyPayload),
     });
 
     if (!response.ok) {
@@ -50,14 +50,14 @@ export async function executeCode(language, code) {
 
     const data = await response.json();
 
-    const output = data.run.output || "";
-    const stderr = data.run.stderr || "";
+    const output = data.output || "";
+    const error = data.error || "";
 
-    if (stderr) {
+    if (error) {
       return {
         success: false,
         output: output,
-        error: stderr,
+        error: error,
       };
     }
 
